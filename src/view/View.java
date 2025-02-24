@@ -1,9 +1,12 @@
 package view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -24,6 +27,7 @@ public class View extends JFrame implements iEVDContract.View{
     private JTextField modelField;
     private JButton searchButton;
     private JCheckBox departmentCondition;
+    private JDialog taxDialog;
 
 
     public View(){
@@ -37,7 +41,13 @@ public class View extends JFrame implements iEVDContract.View{
         customizeModelField();
         customizeSearchButton();
         customizeDepartmentCondition();
+        customizeJDialog();
         this.setVisible(true);
+    }
+
+    public void customizeJDialog(){
+        taxDialog = new TaxDialog(this);
+        this.add(taxDialog);
     }
 
     public void customizeFrame(){
@@ -94,6 +104,18 @@ public class View extends JFrame implements iEVDContract.View{
     public void customizeSearchButton(){
         searchButton = new JButton("Buscar");
         searchButton.setBounds(200, 400, 100, 40);
+        searchButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String brand = brandField.getText();
+                String line = lineField.getText();
+                String model = modelField.getText();
+                boolean registeredInBoyacá = departmentCondition.isSelected();
+                presenter.calculateTaxValue(brand, line, model, registeredInBoyacá);
+            }
+            
+        });
         this.add(searchButton);
     }
 
@@ -106,5 +128,16 @@ public class View extends JFrame implements iEVDContract.View{
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void showFinalTax(double finalTax) {
+        ((TaxDialog)taxDialog).setTaxLabelText(String.valueOf(finalTax));
+        taxDialog.setVisible(rootPaneCheckingEnabled);
+    }
+
+    @Override
+    public void carNotFound() {
+        ((TaxDialog)taxDialog).setTaxLabelText("Vehículo no encontrado");
     }
 }
