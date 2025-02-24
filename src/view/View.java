@@ -10,7 +10,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import interfaces.iEVDContract;
 import interfaces.iEVDContract.Presenter;
@@ -41,13 +40,8 @@ public class View extends JFrame implements iEVDContract.View{
         customizeModelField();
         customizeSearchButton();
         customizeDepartmentCondition();
-        customizeJDialog();
-        this.setVisible(true);
-    }
-
-    public void customizeJDialog(){
         taxDialog = new TaxDialog(this);
-        this.add(taxDialog);
+        this.setVisible(true);
     }
 
     public void customizeFrame(){
@@ -132,12 +126,13 @@ public class View extends JFrame implements iEVDContract.View{
 
     @Override
     public void showFinalTax(double finalTax) {
-        ((TaxDialog)taxDialog).setTaxLabelText(String.valueOf(finalTax));
-        taxDialog.setVisible(rootPaneCheckingEnabled);
+        ((TaxDialog)taxDialog).setTaxLabelText(String.format("%.0f", finalTax*1000));
+        taxDialog.setVisible(true);
     }
 
     @Override
     public void carNotFound() {
         ((TaxDialog)taxDialog).setTaxLabelText("Vehículo no encontrado");
+        taxDialog.setVisible(true);
     }
 }

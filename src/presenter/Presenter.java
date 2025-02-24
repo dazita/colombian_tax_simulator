@@ -20,7 +20,15 @@ public class Presenter implements iEVDContract.Presenter{
     }
 
     @Override
-    public void calculateTaxValue(String brand, String line, String model, boolean departmentCondition) {
-        model.calculateTaxValue(brand, line, model, departmentCondition);
+    public void calculateTaxValue(String brand, String line, String carModel, boolean departmentCondition) {
+        double finalTax = model.calculateTaxFinal(brand, line, carModel, departmentCondition);
+        if (finalTax != 0) {
+            view.showFinalTax(finalTax);       
+        }
+    }
+
+    @Override
+    public void carNotFound() {
+        view.carNotFound();
     }
 }

@@ -25,7 +25,7 @@ public class BrandFetcher {
                 List<String> list = Arrays.asList(data);
                 List<String> models = list.subList(11, 67);
                 String[] modelsArray = models.toArray(new String[0]);
-                String fuel = data[79];
+                String fuel = data[79].replace("\"", "");
 
                 if (type.equals("CAMPERO") || type.equals("AUTOMOVIL") || type.equals("CAMIONETA PASAJ.")) {
                     Brand brand = searchOrCreateBrand(brandName);
